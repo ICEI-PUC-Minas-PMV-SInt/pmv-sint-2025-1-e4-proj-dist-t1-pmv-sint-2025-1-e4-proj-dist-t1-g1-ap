@@ -3,33 +3,48 @@
 > Identifique as principais personas e descreva suas atividades, respondendo às seguintes perguntas:
 > qual é o perfil de cada persona? O que elas esperam do produto de software?
 
-## Persona 1: Ana, a Freelancer de Design Gráfico
+## Persona 1: *Narcisa Neves*, a vendedora de imóveis e mãe solo
 
 - **Perfil:**
-  * Ana é uma designer gráfica freelancer experiente, especializada em branding e identidade visual.
-  * Ela é organizada, detalhista e busca constantemente otimizar seu fluxo de trabalho.
-  * Ana valoriza ferramentas que a ajudem a manter o foco, cumprir prazos e gerenciar múltiplos projetos simultaneamente.
-  * Ela necessita de um sistema que a auxilie na organização de seus clientes, e no processo de emissão de notas fiscais.
+  * Ana gosta de passar seu tempo livre lendo e vendo vídeos engraçados de animais na internet.
+  * Ela é muito dedicada em seu trabalho e uma mãe muito devota aos desejos de sua filha.
+  * Ana sempre quis adotar um gatinho para sua filha mas nunca conseguiu achar alguém que estivesse doando um filhote.
 - **Expectativas:**
-  * Ela busca recursos como cronometragem precisa, técnicas de produtividade e geração de relatórios de tempo e custos.
-  * Ana espera que o software tenha uma integração com a receita federal, ou que de alguma forma auxilie ela no processo de emissão de notas fiscais.
+  * Ela procura uma forma segura de prática de adotar um animal e realizar o desejo de sua filha.
 - **Atividades:**
-  * Ana usa o software para criar e monitorar tarefas, registrar horas trabalhadas, priorizar atividades, aplicar técnicas de produtividade, sincronizar prazos com o Google Calendar e gerar relatórios para clientes.
-  * Ana utiliza o software para gerar os dados de suas notas fiscais, e organizar seus clientes
+  * Ana usa o software para buscar animais filhotes que estão para adoção.
+  * Ela usa o software para saber as características dos animais para achar o mais adequado para sua filha. 
 
-## Persona 2: Carlos, o Cliente Empreendedor
+## Persona 2: *Ellen Queiroz*, a chefe executiva em uma ONG de proteção de animais
 
 - **Perfil:**
-  * Carlos é um empreendedor dinâmico e dono de uma agência de marketing digital.
-  * Ele valoriza a transparência, a eficiência e a comunicação clara com seus colaboradores freelancers.
-  * Carlos precisa de ferramentas que o ajudem a acompanhar o progresso dos projetos, controlar os custos e garantir a qualidade do trabalho entregue.
-  * Carlos necessita de uma ferramenta que lhe auxilie a organizar os diversos freelancers que prestam serviço a ele.
+  * Ellen gosta de ler e de participar de coletiva de impressa com ONGS parceiras.
+  * Ela encontra muita dificuldade de encontrar de forma rápida novas famílias para os animais resgatados e precisa de uma nova forma para alcançar esse objetivo.
 - **Expectativas:**
-  * Carlos espera que o software forneça informações precisas sobre o tempo gasto pelos freelancers em cada tarefa e projeto.
-  * Ele deseja receber relatórios detalhados e atualizados sobre o progresso, os custos e o desempenho dos freelancers.
-  * Carlos busca uma plataforma que facilite a comunicação e a colaboração com os freelancers, garantindo a entrega de projetos dentro do prazo e do orçamento.
+  * Ellen espera que o software a ajude a facilitar e aumentar as adoções dos animais resgatados por sua ONG.
+  * Ela deseja facilitar a busca de pessoas que querem adotar um animal.
 - **Atividades:**
-  * Carlos usa o software para monitorar relatórios de tempo e custos, avaliar o desempenho dos freelancers, aprovar pagamentos, comunicar-se com os freelancers e analisar dados para tomar decisões estratégicas.
-  * Carlos utiliza o programa para organizar os diversos freelancers que trabalham com ele.
+  * Ellen usa o software para compartilhar os animais resgatados com o intuito de achar um lar para os mesmos com mais rapidez e facilidade.
+
+ ## Persona 3: *José Lopes*, o assistente veterinário e provedor de lar temporário para animais resgatados
+
+- **Perfil:**
+  * José gosta de passar o tempo livre com fotografia e se voluntariando em abrigo de animais.
+  * Ele tem como projeto pessoal regatar e cuidar de animais de rua até que estejam saudáveis e prontos para adoção
+- **Expectativas:**
+  * José espera que o software o ajude a achar pessoas dispostas a realizarem a adoção desses animais regatados.
+- **Atividades:**
+  * Ele usa o software para encontrar lares adequados para os animais regatados.
+
+ ## Persona 3: *Maria Antônia*, a dona de casa e cabelereira
+
+- **Perfil:**
+  * Maria gosta de fazer crochê e se sente muito sozinha.
+  * Ela sempre amou animais e nunca teve a oportunidade de ter um, hoje busca um pet para fazer companhia mas está tendo muita dificuldade para encontrar algum animal para adotar.
+- **Expectativas:**
+  * Maria espera que o software a ajude a encontrar um animal para fazer companhia.
+- **Atividades:**
+  * Ele usa o software para encontrar um animal ideal para seu estilo de vida.
+
 
 [Retorna](../README.md)
