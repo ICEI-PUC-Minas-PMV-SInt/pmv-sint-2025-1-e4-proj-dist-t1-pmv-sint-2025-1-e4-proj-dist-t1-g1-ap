@@ -5,21 +5,26 @@
 > produto deve ter uma funcionalidade para isso. Qual é? Quais problemas da persona 
 > essa funcionalidade resolve? Quais benefícios ela traz para a persona? 
 
-## Funcionalidades para Ana, a Designer Freelancer:
+## Funcionalidades para *Narcisa Neves*, a vendedora de imóveis e mãe solo:
 
-1. Registro de tarefas e projetos: Permite que Ana crie e organize tarefas e projetos com detalhes como prazos, clientes e informações relevantes. Resolvendo a dificuldade de gerenciar múltiplos projetos e garante uma visão clara do fluxo de trabalho;
-2. Cronometragem de tarefa: Oferece um cronômetro configurações personalizáveis de tempo de trabalho e pausas para registro preciso das horas em utilizadas;
-3. Priorização de Tarefas: Funcionalidade que permite classificar tarefas por importância e urgência. Ajuda Ana a priorizar tarefas críticas e evitar sobrecarga;
-4. Geração de Notas Fiscais Eletrônicas: Permite que Ana integre suas tarefas e projetos ao Google Calendar, facilitando o acompanhamento de prazos e uma melhor organização de sua agenda;
-5. Relatório de Tempo por Projeto: Gera relatórios detalhados de tempo gasto em cada projeto, auxiliando Ana a calcular o custo real de seus serviços e facilitando a cobrança aos clientes.
+1. Feed de animais disponíveis para adoção: Permite que Narcisa navegue por todos os animais disponíveis e ache o animal ideal para sua filha.
+2. Marcação de postagem como favorita: Ao permitir que marque como a postagem como favorita permite que Narcisa selecione os animais que mais gostou;
+3. Vizualização de postagens marcadas como favoritas: Funcionalidade que permite Narcisa nagevar apenas pelas postagem que já pré-selecionou como favoritas;
+4. Filtro por característiscas das postagem: Permite que Narcisa filtre as postagens por características que mais se adequem a seu caso;
 
-## Funcionalidades para Carlos, o Cliente Empreendedor:
-1. Acompanhamento de Freelancers: Permite que Carlos visualize o progresso dos freelancers, o tempo gasto em cada tarefa e o status dos projetos. Garante transparência, controle e comunicação eficiente com os freelancers;
-2. Relatórios de Tempo e Custos: Oferece relatórios detalhados com filtros e opções de personalização para análise do desempenho dos freelancers e dos custos dos projetos. Facilita a tomada de decisões informadas e a avaliação da eficiência dos freelancers;
-3. Avaliação de Desempenho com Métricas e Feedback: Fornece métricas de desempenho dos freelancers, como tempo de resposta, qualidade do trabalho e cumprimento de prazos, e permite o envio de feedback. Ajuda Carlos a identificar os melhores freelancers e a melhorar a qualidade dos projetos;
-4. Integração com Pagamento: Funcionalidade que possibilita a integração com sistemas de pagamento, permitindo que Carlos realize pagamentos precisos com base nos relatórios de tempo dos freelancers.
-5. Comunicação com Freelancers: Oferece um canal de comunicação para que Carlos possa se comunicar facilmente com os freelancers, tirar dúvidas e fornecer feedback sobre os projetos.
+## Funcionalidades para *Ellen Queiroz*, a chefe executiva em uma ONG de proteção de animais:
+1. Compartilhamento de postagem de animais disponíveis para adoção: Permite que Ellen compartilhe postagens dos animais disponíveis para adoção que sua ONG resgatou;
+2. Compartilhamento de link externo das postagens: Oferece a Ellen a opção de compartilhar o link com a postagem dos animais externamente por outros meios;
+3. Contagem de favoritos nas postagens: Fornece a Ellen e sua ONG uma noção da procura que os animais regatados estão tendo;
 
+## Funcionalidades para *José Lopes*, o assistente veterinário e provedor de lar temporário para animais resgatados:
+1. Compartilhamento de postagem de animais disponíveis para adoção: Permite que José compartilhe postagens dos animais regatados juntamente de suas características;
+2. Compartilhamento de link externo das postagens: José poderá compartilhar externamente o link já com todos os dados referentes ao animal a ser adotado;
+
+## Funcionalidades para *Maria Antônia*, a dona de casa e cabelereira:
+1. Feed de animais disponíveis para adoção: Maria poderá buscar por todos os animais disponíveis para adoção até encontrar o mais apropriado para adotar;
+2. Marcação de postagem como favorita: Maria poderar marcar como favoritas as postagens que achar mais adequadas para seu perfil;
+3. Vizualização de postagens marcadas como favoritas: Funcionalidade que ajudará Maria encontrar as postagens que marcou como favoritas;
 
 ## Tabela de Funcionalidades:
 
