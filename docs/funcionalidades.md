@@ -28,19 +28,14 @@
 
 ## Tabela de Funcionalidades:
 
-| Funcionalidades | Ana (Designer Freelancer) | Carlos (Cliente Empreendedor) |
-|---|---|---|
-| Registro de Tarefas e Projetos Detalhados | Sim | - |
-| Cronômetro Pomodoro com Personalização | Sim | - |
-| Priorização Inteligente de Tarefas (Método Eisenhower) | Sim | - |
-| Geração de Notas Fiscais Eletrônicas Integrada à Receita Federal | Sim | - |
-| Relatórios Detalhados de Tempo e Custos por Projeto | Sim | Sim |
-| Gerenciamento de Clientes | Sim | - |
-| Painel de Acompanhamento de Freelancers em Tempo Real | - | Sim |
-| Relatórios Personalizáveis de Tempo, Custos e Desempenho | - | Sim |
-| Avaliação de Desempenho com Métricas e Feedback | - | Sim |
-| Integração com Sistemas de Pagamento e Faturamento Automatizado | - | Sim |
-| Canal de Comunicação Integrado com Notificações | - | Sim |
-| Gerenciamento de Freelancers | - | Sim |
+| Funcionalidades                                | Narcisa Neves | Ellen Queiroz | José Lopes | Maria Antônia |
+|------------------------------------------------|---------------|---------------|------------|---------------|
+| Criar postagens                                | -             | Sim           | Sim        | -             |
+| Favoritar postagens                            | Sim           | -             | -          | Sim           |
+| Visualizar postagens favoritadas               | Sim           | -             | -          | Sim           |
+| Filtro por característiscas das postagem       | Sim           | -             | -          | Sim           |
+| Compartilhamento de link externo das postagens | -             | Sim           | Sim        | -             |
+| Contagem de favoritos nas postagens            | -             | Sim           | Sim        | -             |
+
 
 [Retorna](../README.md)
