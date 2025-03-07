@@ -1,6 +1,6 @@
 # Problemas & dores
 
-> A implementação de uma API web para adoção de animais visa solucionar as dificuldades atuais de conexão entre adotantes e doadores de maneira eficiente e organizada. A seguir, estão os principais problemas e desafios que a API abordará:
+> A implementação de uma API web para a plataforma AdotaPet visa solucionar as dificuldades atuais de conexão entre adotantes e doadores de maneira eficiente e organizada. A seguir, estão os principais problemas e desafios que a API abordará:
 
 1. Dificuldade na localização de animais para adoção e de adotantes dispostos a adotar de forma responsável.
 2. Falta de uma plataforma centralizada para facilitar o processo de adoção de forma segura e eficiente.
