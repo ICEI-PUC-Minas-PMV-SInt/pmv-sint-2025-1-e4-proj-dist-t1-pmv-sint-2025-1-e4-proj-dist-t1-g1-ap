@@ -7,15 +7,15 @@
 
 | **Endpoint**                  | **Método** | **Descrição**                           | **Parâmetros**                    | **Formato da Resposta** | **Autenticação e Autorização** |
 |-------------------------------|------------|-----------------------------------------|-----------------------------------|-------------------------|--------------------------------|
-| /api/users                    | POST       | Criar usuário                           | -                                 | JSON                    | -                              |
-| /api/users/{user_id}          | GET        | Obter dados de um usuário específico    | user_id (string)                  | JSON                    | JWT Token                      |
-| /api/users/{user_id}/{status} | POST       | Desabilita/habilita usuário específico  | user_id (string) status (string)  | JSON                    | JWT Token                      |
-| /api/users/{user_id}          | PUT        | Atualiza dados de um usuário específico | user_id (string)                  | JSON                    | JWT Token                      |
-| /api/posts                    | POST       | Cria um anúncio                         | -                                 | JSON                    | JWT Token                      |
-| /api/posts/{post_id}          | GET        | Obter dados de um anúncio específico    | post_id (string)                  | JSON                    | JWT Token                      |
-| /api/posts/{post_id}/{status} | POST       | Desabilita/habilita anúncio específico  | post_id (string)  status (string) | JSON                    | JWT Token                      |
-| /api/posts/{post_id}          | PUT        | Atualiza dados de um anúncio específico | post_id (string)                  | JSON                    | JWT Token                      |
-| /api/posts                    | GET        | Obter todos os anúncios                 | -                                 | JSON                    | JWT Token                      |
+| /api/Usuarios                    | POST       | Criar usuário                           | -                                 | JSON                    | -                              |
+| /api/Usuarios/{id}          | GET        | Obter dados de um usuário específico    | id (string)                  | JSON                    | JWT Token                      |
+| /api/Usuarios/{id}/{status} | POST       | Desabilita/habilita usuário específico  | id (string) status (string)  | JSON                    | JWT Token                      |
+| /api/Usuarios/{id}          | PUT        | Atualiza dados de um usuário específico | id (string)                  | JSON                    | JWT Token                      |
+| /api/Anuncios                    | POST       | Cria um anúncio                         | -                                 | JSON                    | JWT Token                      |
+| /api/Anuncios/{id}          | GET        | Obter dados de um anúncio específico    | id (string)                  | JSON                    | JWT Token                      |
+| /api/Anuncios/{id}/{status} | POST       | Desabilita/habilita anúncio específico  | id (string)  status (string) | JSON                    | JWT Token                      |
+| /api/Anuncios/{id}          | PUT        | Atualiza dados de um anúncio específico | id (string)                  | JSON                    | JWT Token                      |
+| /api/Anuncios                    | GET        | Obter todos os anúncios                 | -                                 | JSON                    | JWT Token                      |
 
 
 [Retorna](../README.md)
