@@ -1,0 +1,27 @@
+{
+  "name": "adota-pet-frontend",
+  "private": true,
+  "version": "0.0.0",
+  "type": "module",
+  "scripts": {
+    "dev": "vite",
+    "build": "vite build",
+    "lint": "eslint .",
+    "preview": "vite preview",
+    "backend": "cd.. && cd adotapet && cd src && cd api-adota-pet-api && cd api-adota-pet && dotnet run"
+  },
+  "dependencies": {
+    "@tailwindcss/vite": "^4.1.1",
+    "axios": "^1.8.4",
+    "react": "^19.0.0",
+    "react-dom": "^19.0.0",
+    "react-router-dom": "^7.4.1",
+    "tailwindcss": "^4.1.1"
+  },
+  "devDependencies": {
+    "@vitejs/plugin-react-swc": "^3.8.0",
+    "prettier": "3.5.3",
+    "prettier-plugin-tailwindcss": "^0.6.11",
+    "vite": "^6.2.0"
+  }
+}
