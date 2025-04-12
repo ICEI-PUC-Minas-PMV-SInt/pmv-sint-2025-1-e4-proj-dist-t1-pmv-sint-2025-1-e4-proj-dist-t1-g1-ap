@@ -6,33 +6,25 @@ import { api } from '../helpers/api'
 function Editar_Anuncio() {
   const { id } = useParams()
   const navigate = useNavigate() // Hook para navegação
-  const [formData, setFormData] = useState({
-    titulo: '',
-    descricao: '',
-    categoria: '',
-    raca: '',
-    idade: '',
-  })
+  const [formData, setFormData] = useState({})
   const [warning, setWarning] = useState(null)
   const [loading, setLoading] = useState(false)
 
   useEffect(() => {
-    async function fetchData() {
-      try {
-        const response = await api.get(`/Anuncios/${id}`)
-        setFormData({
-          titulo: response.data.titulo,
-          descricao: response.data.descricao,
-          categoria: response.data.categoria,
-          raca: response.data.raca,
-          idade: response.data.idade,
-        })
-      } catch (err) {
-        console.error(err)
-        setWarning('Erro ao carregar os dados do anúncio.')
-      }
-    }
-    fetchData()
+    setLoading(true)
+    api
+      .get(`/Anuncios/${id}`)
+      .then(res => {
+        setLoading(false)
+        setFormData(res.data)
+      })
+      .catch(err => {
+        setLoading(false)
+        console.log(err)
+        setWarning(
+          `Erro "${err.message}", consulte o console para mais informações`,
+        )
+      })
   }, [id])
 
   const handleChange = e => {
@@ -51,7 +43,7 @@ function Editar_Anuncio() {
     await api
       .put(`/Anuncios/${id}`, {
         ...formData,
-        ativo: true,
+        id: id,
       })
       .then(res => {
         setLoading(false)
@@ -84,29 +76,33 @@ function Editar_Anuncio() {
                 value={formData.titulo}
                 onChange={handleChange}
                 placeholder='Título do anúncio'
+                type={'text'}
               />
               <Input
                 id='descricao'
                 value={formData.descricao}
                 onChange={handleChange}
                 placeholder='Descrição'
+                type={'text'}
               />
-              <SelectCategoria
+              {/*<SelectCategoria
                 id='categoria'
                 value={formData.categoria}
                 onChange={handleChange}
-              />
+              />*/}
               <Input
-                id='raca'
-                value={formData.raca}
+                id='racaAnimal'
+                value={formData.racaAnimal}
                 onChange={handleChange}
                 placeholder='Raça'
+                type={'text'}
               />
               <Input
-                id='idade'
-                value={formData.idade}
+                id='idadeAnimal'
+                value={formData.idadeAnimal}
                 onChange={handleChange}
                 placeholder='Idade'
+                type={'number'}
               />
 
               <div className='flex w-full gap-2'>
@@ -135,12 +131,14 @@ function Editar_Anuncio() {
   )
 }
 
-function Input({ id, value, onChange, placeholder }) {
+function Input({ id, type, value, onChange, placeholder }) {
   return (
     <input
       id={id}
       value={value}
       onChange={onChange}
+      min={0}
+      type={type}
       placeholder={placeholder}
       className='w-full rounded-lg bg-[#ffffff] px-2 py-2.5 text-[#4f4f4f] outline-0 transition-all placeholder:font-bold placeholder:text-[#b1b1b1] placeholder:italic hover:scale-105 focus:scale-105'
       required
@@ -148,7 +146,7 @@ function Input({ id, value, onChange, placeholder }) {
   )
 }
 
-function SelectCategoria({ id, value, onChange }) {
+/*function SelectCategoria({ id, value, onChange }) {
   return (
     <select
       id={id}
@@ -165,6 +163,6 @@ function SelectCategoria({ id, value, onChange }) {
       <option value='Ave'>Ave</option>
     </select>
   )
-}
+}*/
 
 export { Editar_Anuncio }

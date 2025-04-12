@@ -4,36 +4,19 @@ import { api } from '../helpers/api'
 import { useNavigate } from 'react-router-dom' // 👈 IMPORTANTE
 
 function Anuncios() {
-  const [anuncios, setAnuncios] = useState([])
+  const [anuncios, setAnuncios] = useState(null)
+  const [warning, setWarning] = useState('')
 
   useEffect(() => {
-    const mockAnuncios = [
-      {
-        id: 1,
-        titulo: 'Cachorrinho para adoção',
-        descricao: 'Muito dócil e brincalhão.',
-        categoria: 'Canino',
-        raca: 'Labrador',
-        idade: '2',
-      },
-      {
-        id: 2,
-        titulo: 'Pérola',
-        descricao: 'Ótima com crianças.',
-        categoria: 'Felino',
-        raca: 'Siamês',
-        idade: '1',
-      },
-      {
-        id: 3,
-        titulo: 'Pluto',
-        descricao: 'Manso e brincalhão',
-        categoria: 'Canino',
-        raca: 'Dobermann',
-        idade: '1',
-      },
-    ]
-    setAnuncios(mockAnuncios)
+    api
+      .get('/Anuncios')
+      .then(res => setAnuncios(res.data))
+      .catch(err => {
+        console.log(err)
+        setWarning(
+          `Erro "${err.message}", consulte o console para mais informações`,
+        )
+      })
   }, [])
 
   return (
@@ -44,9 +27,11 @@ function Anuncios() {
           Anúncios
         </h1>
         <div className='flex flex-col gap-6'>
-          {anuncios.map(anuncio => (
-            <AnuncioCard key={anuncio.id} anuncio={anuncio} />
-          ))}
+          {warning && <p>{warning}</p>}
+          {anuncios &&
+            anuncios.map(anuncio => (
+              <AnuncioCard key={anuncio.id} anuncio={anuncio} />
+            ))}
         </div>
       </div>
     </div>
@@ -68,17 +53,18 @@ function AnuncioCard({ anuncio }) {
           <span className='block text-xs text-gray-500'>Descrição</span>
           {anuncio.descricao}
         </div>
-        <div>
+        {/*<div>
           <span className='block text-xs text-gray-500'>Categoria</span>
           {anuncio.categoria}
-        </div>
+        </div>*/}
         <div>
           <span className='block text-xs text-gray-500'>Raça</span>
-          {anuncio.raca}
+          {anuncio.racaAnimal}
         </div>
         <div>
           <span className='block text-xs text-gray-500'>Idade</span>
-          {Number(anuncio.idade)} {Number(anuncio.idade) === 1 ? 'ano' : 'anos'}
+          {Number(anuncio.idadeAnimal)}{' '}
+          {Number(anuncio.idadeAnimal) <= 1 ? 'ano' : 'anos'}
         </div>
         <div className='mt-4 flex flex-wrap items-center gap-2 lg:mt-0'>
           <button

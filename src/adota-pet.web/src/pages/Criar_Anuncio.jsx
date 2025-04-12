@@ -12,19 +12,20 @@ function Criar_Anuncio() {
 
     const titulo = document.getElementById('tituloInput').value
     const descricao = document.getElementById('descricaoInput').value
-    const categoria = document.getElementById('categoriaSelect').value
+    //const categoria = document.getElementById('categoriaSelect').value
     const raca = document.getElementById('racaInput').value
     const idade = document.getElementById('idadeInput').value
 
     setLoading(true)
     await api
       .post('/Anuncios', {
-        titulo,
-        descricao,
-        categoria,
-        raca,
-        idade,
-        ativo: true,
+        titulo: titulo,
+        idadeAnimal: idade,
+        categoriaAnimal: 0, // categoriaAnimal: categoria,
+        racaAnimal: raca,
+        descricao: descricao,
+        imagemCapa: 'string',
+        usuarioId: 3,
       })
       .then(res => {
         setLoading(false)
@@ -65,9 +66,14 @@ function Criar_Anuncio() {
                 type='text'
                 required
               />
-              <SelectCategoria id='categoriaSelect' required />
+              {/*<SelectCategoria id='categoriaSelect' required />*/}
               <Input id='racaInput' placeholder='Raça' type='text' required />
-              <Input id='idadeInput' placeholder='Idade' type='text' required />
+              <Input
+                id='idadeInput'
+                placeholder='Idade'
+                type='number'
+                required
+              />
 
               {/* Botões */}
               <div className='flex w-full gap-2'>
@@ -102,13 +108,14 @@ function Input({ id, placeholder, type, required }) {
       id={id}
       placeholder={placeholder}
       type={type}
+      min={0}
       required={required}
       className='w-full rounded-lg bg-[#ffffff] px-2 py-2.5 text-[#4f4f4f] outline-0 transition-all placeholder:font-bold placeholder:text-[#b1b1b1] placeholder:italic hover:scale-105 focus:scale-105'
     />
   )
 }
 
-function SelectCategoria({ id, required }) {
+/*function SelectCategoria({ id, required }) {
   return (
     <select
       id={id}
@@ -124,6 +131,6 @@ function SelectCategoria({ id, required }) {
       <option value='Ave'>Ave</option>
     </select>
   )
-}
+}*/
 
 export { Criar_Anuncio }

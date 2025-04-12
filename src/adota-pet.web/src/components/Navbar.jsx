@@ -2,7 +2,7 @@ import { NavLink, useMatch, useResolvedPath } from 'react-router-dom'
 
 function Navbar() {
   return (
-    <nav className='fixed flex w-screen items-center bg-[#3b5253] px-5 py-4'>
+    <nav className='fixed z-50 flex w-screen items-center bg-[#3b5253] px-5 py-4'>
       <ul className='flex gap-4'>
         <li>
           <Link to={'/'}>Cadastro</Link>
