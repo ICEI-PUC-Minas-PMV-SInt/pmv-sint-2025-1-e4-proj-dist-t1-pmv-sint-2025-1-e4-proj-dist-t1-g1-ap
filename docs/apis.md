@@ -18,6 +18,6 @@
 | /api/Anuncios                    | GET        | Obter todos os anúncios                 | -                                 | JSON                    | JWT Token                      |
 | /api/admin/Usuarios/{id}/{status} | POST       | Desabilita/habilita usuário específico  | id (string) status (string)  | JSON                    | JWT Token, Usuário Admin                      |
 | /api/admin/Anuncios/{id}/{status} | POST       | Desabilita/habilita anúncio específico  | id (string) status (string)  | JSON                    | JWT Token, Usuário Admin                      |
-| /api/Usuarios/authenticate | POST       | Loga um usuário   | id (string) status (string)  | JSON                    | JWT Token, Usuário Admin                      |
+| /api/Usuarios/authenticate | POST       | Loga um usuário   | id (string) status (string)  | JSON                    | JWT Token                      |
 
 [Retorna](../README.md)
