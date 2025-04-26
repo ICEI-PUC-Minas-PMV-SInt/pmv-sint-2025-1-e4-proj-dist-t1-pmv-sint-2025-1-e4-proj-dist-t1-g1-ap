@@ -1,11 +1,15 @@
 ﻿using api_adota_pet.Models;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.IdentityModel.Tokens;
+using System.Security.Claims;
+using static System.Runtime.InteropServices.JavaScript.JSType;
 
 namespace api_adota_pet.Controllers
 {
+    [Authorize]
     [Route("api/[controller]")]
     [ApiController]
     public class AnunciosController : ControllerBase
@@ -20,11 +24,26 @@ namespace api_adota_pet.Controllers
 
         public async Task<ActionResult> Create(AnuncioDto model)
         {
+
+            int usuarioId;
+            if (!int.TryParse(User.FindFirst(ClaimTypes.NameIdentifier)?.Value, out usuarioId))
+            {
+                return Unauthorized();
+            }
+      
+            var modelUsuario = await _context.Usuarios
+                 .AsNoTracking()
+                    .FirstOrDefaultAsync(usuario => usuario.Id == usuarioId);
+            if (modelUsuario == null) {
+                return Unauthorized();
+            }
+
+
             Anuncio anuncio = new Anuncio()
             {
-                ExternalId = "123",
+                ExternalId = Guid.NewGuid().ToString(),
                 IdadeAnimal = model.IdadeAnimal,
-                UsuarioId = model.UsuarioId,
+                UsuarioId = usuarioId,
                 CategoriaAnimal = model.CategoriaAnimal,
                 DataPostagem = DateTime.Now,
                 Descricao = model.Descricao,
@@ -44,6 +63,7 @@ namespace api_adota_pet.Controllers
         public async Task<ActionResult> GetAll()
         {
             var model = await _context.Anuncios
+                .Where((anuncio)=> anuncio.Status == Status.Publicado)
                .ToListAsync();
 
             if (model.IsNullOrEmpty()) return NoContent();
@@ -73,8 +93,12 @@ namespace api_adota_pet.Controllers
 
             var modelDb = await _context.Anuncios.AsNoTracking().FirstOrDefaultAsync(anuncio => anuncio.Id == id);
 
-
             if (modelDb == null) return NotFound();
+
+            if (User.FindFirst(ClaimTypes.NameIdentifier)?.Value != modelDb.UsuarioId.ToString())
+            {
+                return Unauthorized();
+            }
 
             Anuncio anuncio = new Anuncio()
             {
@@ -106,6 +130,11 @@ namespace api_adota_pet.Controllers
                 .FirstOrDefaultAsync(anuncio => anuncio.Id == id);
 
             if (model == null) return NotFound();
+
+            if (User.FindFirst(ClaimTypes.NameIdentifier)?.Value != model.UsuarioId.ToString())
+            {
+                return Unauthorized();
+            }
 
             if (status == null) return BadRequest(new { message = "Status não encontrado." });
 
@@ -145,6 +174,58 @@ namespace api_adota_pet.Controllers
 
             return Ok(model);
         }
+
+        [Authorize(Roles = "Admin")]
+        [HttpPost("admin/{id}/{status}")]
+        public async Task<ActionResult> UpdateAnuncioStatus(int id, string status)
+        {
+            var model = await _context.Anuncios
+                .AsNoTracking()
+                .FirstOrDefaultAsync(anuncio => anuncio.Id == id);
+
+            if (model == null) return NotFound();
+
+         
+
+            if (status == null) return BadRequest(new { message = "Status não encontrado." });
+
+            Status? statusVerificado = null;
+
+
+            if (status.ToUpper() == Status.Publicado.ToString().ToUpper())
+            {
+                statusVerificado = Status.Publicado;
+            }
+            else if (status.ToUpper() == Status.Deletado.ToString().ToUpper())
+            {
+                statusVerificado = Status.Deletado;
+            }
+            else
+            {
+                return BadRequest(new { message = "Status não encontrado." });
+            }
+
+            Anuncio anuncio = new Anuncio()
+            {
+                Id = model.Id,
+                ExternalId = model.ExternalId,
+                IdadeAnimal = model.IdadeAnimal,
+                UsuarioId = model.UsuarioId,
+                CategoriaAnimal = model.CategoriaAnimal,
+                DataPostagem = model.DataPostagem,
+                Descricao = model.Descricao,
+                ImagemCapa = model.ImagemCapa,
+                RacaAnimal = model.RacaAnimal,
+                Status = statusVerificado ?? Status.Publicado,
+                Titulo = model.Titulo,
+            };
+
+            _context.Anuncios.Update(anuncio);
+            await _context.SaveChangesAsync();
+
+            return Ok(model);
+        }
+
 
     }
 }

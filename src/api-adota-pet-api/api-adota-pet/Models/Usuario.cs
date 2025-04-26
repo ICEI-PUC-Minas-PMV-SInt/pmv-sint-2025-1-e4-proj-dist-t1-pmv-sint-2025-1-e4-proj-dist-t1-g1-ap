@@ -1,4 +1,5 @@
 ﻿using System.ComponentModel.DataAnnotations;
+using System.Text.Json.Serialization;
 
 namespace api_adota_pet.Models
 {
@@ -15,6 +16,7 @@ namespace api_adota_pet.Models
         public string Email { get; set; }
 
         [Required]
+        [JsonIgnore]
         public string Senha { get; set; }
 
         [Required]

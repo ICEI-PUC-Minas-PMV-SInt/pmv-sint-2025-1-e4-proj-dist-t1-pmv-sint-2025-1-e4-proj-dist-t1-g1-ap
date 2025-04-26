@@ -24,7 +24,7 @@ namespace api_adota_pet.Models
         [Required]
         public string ImagemCapa { get; set; }
 
-        [Required]
-        public int UsuarioId { get; set; }
+        //[Required]
+        //public int UsuarioId { get; set; }
     }
 }
