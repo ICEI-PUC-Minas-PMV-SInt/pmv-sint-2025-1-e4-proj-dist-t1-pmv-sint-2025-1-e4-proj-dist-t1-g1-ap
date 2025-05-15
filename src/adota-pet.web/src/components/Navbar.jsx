@@ -2,7 +2,8 @@ import { NavLink, useMatch, useResolvedPath } from 'react-router-dom'
 
 function Navbar() {
   return (
-    <nav className='fixed z-50 flex w-screen items-center bg-[#3b5253] px-5 py-4'>
+    <nav className='fixed z-50 flex w-screen items-center justify-between bg-[#3b5253] px-5 py-4'>
+      {/* Menu à esquerda */}
       <ul className='flex gap-4'>
         <li>
           <Link to={'/'}>Cadastro</Link>
@@ -17,6 +18,13 @@ function Navbar() {
           <Link to={'/criar_anuncio'}>Criar Anúncio</Link>
         </li>
       </ul>
+
+      {/* Botão de Login à direita */}
+      <ul className='flex gap-4'>
+        <li>
+          <Link to={'/login'}>Login</Link>
+        </li>
+      </ul>
     </nav>
   )
 }
@@ -27,7 +35,11 @@ function Link({ to, children }) {
 
   return (
     <NavLink
-      className={`text-lg font-semibold no-underline ${isActive ? 'border-b-3 border-solid border-[#bddcd8] py-1.5 text-[#bddcd8]' : 'text-white'}`}
+      className={`text-lg font-semibold no-underline transition-all duration-200 ${
+        isActive
+          ? 'border-b-4 border-[#bddcd8] py-1.5 text-[#bddcd8]'
+          : 'text-white hover:text-[#bddcd8]'
+      }`}
       to={to}
     >
       {children}
