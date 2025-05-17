@@ -13,15 +13,12 @@
 | /api/Usuarios/{id}/{status} | POST       | Desabilita/habilita usuário específico  | id (string) status (string)  | JSON                    | JWT Token                      |
 | /api/Usuarios/{id}          | PUT        | Atualiza dados de um usuário específico | id (string)                  | JSON                    | JWT Token                      |
 | /api/Usuarios/admin/{id}/{status} | POST       | Desabilita/habilita usuário específico  | id (string) status (string)  | JSON                    | JWT Token, Usuário Admin                      |
-
 | /api/Anuncios                    | POST       | Cria um anúncio                         | -                                 | JSON                    | JWT Token                      |
 | /api/Anuncios/{id}          | GET        | Obter dados de um anúncio específico    | id (string)                  | JSON                    | JWT Token                      |
 | /api/Anuncios/{id}/{status} | POST       | Desabilita/habilita anúncio específico  | id (string)  status (string) | JSON                    | JWT Token                      |
 | /api/Anuncios/{id}          | PUT        | Atualiza dados de um anúncio específico | id (string)                  | JSON                    | JWT Token                      |
 | /api/Anuncios                    | GET        | Obter todos os anúncios                 | -                                 | JSON                    | JWT Token                      |
-
 | /api/admin/Anuncios/{id}/{status} | POST       | Desabilita/habilita anúncio específico  | id (string) status (string)  | JSON                    | JWT Token, Usuário Admin                      |
-
 | /api/Anuncios/like/{id} | POST | Favorita um anúncio específico | id (string) | JSON | JWT Token |
 | /api/Anuncios/like/{id} | DELETE | Desfavorita um anúncio específico | id (string) | JSON | JWT Token |
 | /api/Anuncios/like | GET | Obtém todos os favoritos do usuário | - | JSON | JWT Token |
