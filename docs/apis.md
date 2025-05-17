@@ -7,7 +7,7 @@
 
 | **Endpoint**                  | **Método** | **Descrição**                           | **Parâmetros**                    | **Formato da Resposta** | **Autenticação e Autorização** |
 |-------------------------------|------------|-----------------------------------------|-----------------------------------|-------------------------|--------------------------------|
-| /api/Usuarios/authenticate | POST       | Loga um usuário   | id (string) status (string)  | JSON                    | -                   |
+| /api/Usuarios/authenticate | POST       | Loga um usuário   | - | JSON                    | -                   |
 | /api/Usuarios                    | POST       | Criar usuário                           | -                                 | JSON                    | -                              |
 | /api/Usuarios/{id}          | GET        | Obter dados de um usuário específico    | id (string)                  | JSON                    | JWT Token                      |
 | /api/Usuarios/{id}/{status} | POST       | Desabilita/habilita usuário específico  | id (string) status (string)  | JSON                    | JWT Token                      |
