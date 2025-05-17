@@ -18,7 +18,7 @@
 | /api/Anuncios/{id}/{status} | POST       | Desabilita/habilita anúncio específico  | id (string)  status (string) | JSON                    | JWT Token                      |
 | /api/Anuncios/{id}          | PUT        | Atualiza dados de um anúncio específico | id (string)                  | JSON                    | JWT Token                      |
 | /api/Anuncios                    | GET        | Obter todos os anúncios                 | -                                 | JSON                    | JWT Token                      |
-| /api/admin/Anuncios/{id}/{status} | POST       | Desabilita/habilita anúncio específico  | id (string) status (string)  | JSON                    | JWT Token, Usuário Admin                      |
+| /api/Anuncios/admin/{id}/{status} | POST       | Desabilita/habilita anúncio específico  | id (string) status (string)  | JSON                    | JWT Token, Usuário Admin                      |
 | /api/Anuncios/like/{id} | POST | Favorita um anúncio específico | id (string) | JSON | JWT Token |
 | /api/Anuncios/like/{id} | DELETE | Desfavorita um anúncio específico | id (string) | JSON | JWT Token |
 | /api/Anuncios/like | GET | Obtém todos os favoritos do usuário | - | JSON | JWT Token |
