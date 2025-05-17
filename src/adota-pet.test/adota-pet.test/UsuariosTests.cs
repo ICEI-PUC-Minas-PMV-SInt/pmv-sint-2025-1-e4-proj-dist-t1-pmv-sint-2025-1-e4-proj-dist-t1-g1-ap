@@ -1,4 +1,5 @@
-﻿using System.Text;
+﻿using System.Net.Http.Headers;
+using System.Text;
 using Microsoft.AspNetCore.Mvc.Testing;
 using Newtonsoft.Json;
 
@@ -8,141 +9,128 @@ namespace adota_pet.test
     public sealed class UsuariosTests
     {
         private static readonly WebApplicationFactory<Program> webApplicationFactory = new();
-        public readonly HttpClient httpClient = webApplicationFactory.CreateDefaultClient();
 
         [TestMethod]
-        public async Task POST_Usuario_Creates_And_Returns_A_New_Usuario()
+        public async Task Add()
         {
-            var newUser = new
-            {
-                email = "teste@teste.com",
-                senha = "testandoAPI",
-                eAdmin = false,
-                nome = "Teste",
-                telefone = "123",
-                documento = "123"
-            };
-            var newUserJson = JsonConvert.SerializeObject(newUser);
-            var payload = new StringContent(newUserJson, Encoding.UTF8, "application/json");
-            var postResponse = httpClient.PostAsync("api/Usuarios", payload).Result;
-            if (postResponse.IsSuccessStatusCode == false)
-            {
-                throw new ArgumentException("Não foi possivel criar um usuário teste");
-            }
-            var postJson = postResponse.Content.ReadAsStringAsync().Result;
-            dynamic postObject = JsonConvert.DeserializeObject(postJson);
-            await httpClient.PostAsync("api/Usuarios/" + postObject.id + "/desabilitado", null);
-            Assert.IsNotNull(postJson);
+            dynamic testUser = await new Utils().CreateTestUser(false);
+            Assert.IsNotNull(testUser.id);
+        }
+        
+        [TestMethod]
+        public async Task Login()
+        {
+            dynamic testUser = await new Utils().CreateTestUser(false); 
+            Assert.IsNotNull(testUser.token);
         }
 
         [TestMethod]
-        public async Task GET_Usuario_By_Id_Returns_Usuario()
+        public async Task GetById()
         {
-            var newUser = new
-            {
-                email = "teste@teste.com",
-                senha = "testandoAPI",
-                eAdmin = false,
-                nome = "Teste",
-                telefone = "123",
-                documento = "123"
-            };
-            var newUserJson = JsonConvert.SerializeObject(newUser);
-            var payload = new StringContent(newUserJson, Encoding.UTF8, "application/json");
-            var postResponse = httpClient.PostAsync("api/Usuarios", payload).Result;
-            if (postResponse.IsSuccessStatusCode == false) {
-                throw new ArgumentException("Não foi possivel criar um usuário teste");
-            }
-            var postJson = postResponse.Content.ReadAsStringAsync().Result;
-            dynamic postObject = JsonConvert.DeserializeObject(postJson);
-            await httpClient.PostAsync("api/Usuarios/" + postObject.id + "/desabilitado", null);
+            var httpClient = webApplicationFactory.CreateDefaultClient();
 
-            var getResponse = httpClient.GetAsync("api/Usuarios/" + postObject.id).Result;
-            if (getResponse.IsSuccessStatusCode == false)
+            dynamic testUser = await new Utils().CreateTestUser(false);
+
+            httpClient.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", testUser.token);
+
+            var response = httpClient.GetAsync("api/Usuarios/" + testUser.id).Result;
+            if (response.IsSuccessStatusCode == false)
             {
-                throw new ArgumentException("Não foi possivel achar o usuário teste");
+                throw new ArgumentException("Não foi possivel resgatar o usuário teste");
             }
-            var getJson = getResponse.Content.ReadAsStringAsync().Result;
-            Assert.IsNotNull(getJson);
+            var responseData = response.Content.ReadAsStringAsync().Result;
+
+            Assert.IsNotNull(responseData);
         }
 
         [TestMethod]
-        public void POST_Usuario_Status_Changes_Usuario_Status()
+        public async Task Update()
         {
-            var newUser = new
-            {
-                email = "teste@teste.com",
-                senha = "testandoAPI",
-                eAdmin = false,
-                nome = "Teste",
-                telefone = "123",
-                documento = "123"
-            };
-            var newUserJson = JsonConvert.SerializeObject(newUser);
-            var payload = new StringContent(newUserJson, Encoding.UTF8, "application/json");
-            var creationResponse = httpClient.PostAsync("api/Usuarios", payload).Result;
-            if (creationResponse.IsSuccessStatusCode == false)
-            {
-                throw new ArgumentException("Não foi possivel criar um usuário teste");
-            }
-            var creationJson = creationResponse.Content.ReadAsStringAsync().Result;
-            dynamic creationObject = JsonConvert.DeserializeObject(creationJson);
+            var httpClient = webApplicationFactory.CreateDefaultClient();
 
-            var postResponseEnabled = httpClient.PostAsync("api/Usuarios/" + creationObject.id + "/habilitado", null).Result;
-            if (postResponseEnabled.IsSuccessStatusCode == false)
+            dynamic testUser = await new Utils().CreateTestUser(false);
+
+            httpClient.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", testUser.token);
+
+            dynamic updatedTestUser = new {
+                id = testUser.id,
+                email = "updateTest@teste.com",
+                senha = "updateTest@teste.com",
+                eAdmin = false,
+                nome = "updateTest",
+                telefone = "321",
+                documento = testUser.documento,
+            };
+            updatedTestUser = JsonConvert.SerializeObject(updatedTestUser);
+            var payload = new StringContent(updatedTestUser, Encoding.UTF8, "application/json");
+
+            var response = httpClient.PutAsync("api/Usuarios/" + testUser.id, payload).Result;
+            if (response.IsSuccessStatusCode == false)
+            {
+                throw new ArgumentException("Não foi possivel resgatar o usuário teste");
+            }
+            var responseData = response.Content.ReadAsStringAsync().Result;
+
+            Assert.IsNotNull(responseData);
+        }
+
+        [TestMethod]
+        public async Task UpdateStatus()
+        {
+            var httpClient = webApplicationFactory.CreateDefaultClient();
+
+            dynamic testUser = await new Utils().CreateTestUser(false);
+
+            httpClient.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", testUser.token);
+
+            var enabledStatusResponse = httpClient.PostAsync("api/Usuarios/" + testUser.id + "/habilitado", null).Result;
+            if (enabledStatusResponse.IsSuccessStatusCode == false)
             {
                 throw new ArgumentException("Não foi possivel alterar o status do usuário teste para habilitado");
             }
 
-            var postResponseDisabled = httpClient.PostAsync("api/Usuarios/" + creationObject.id + "/desabilitado", null).Result;
-            if (postResponseDisabled.IsSuccessStatusCode == false)
+            var disabledStatusResponse = httpClient.PostAsync("api/Usuarios/" + testUser.id + "/desabilitado", null).Result;
+            if (disabledStatusResponse.IsSuccessStatusCode == false)
             {
                 throw new ArgumentException("Não foi possivel alterar o status do usuário teste para desabilitado");
             }
-            Assert.IsTrue(postResponseEnabled.IsSuccessStatusCode && postResponseDisabled.IsSuccessStatusCode);
+
+            Assert.IsTrue(enabledStatusResponse.IsSuccessStatusCode && disabledStatusResponse.IsSuccessStatusCode);
         }
 
         [TestMethod]
-        public async Task PUT_Usuario_Updates_Usuario()
+        public async Task UpdateStatusAdmin()
         {
-            var newUser = new
-            {
-                email = "teste@teste.com",
-                senha = "testandoAPI",
-                eAdmin = false,
-                nome = "Teste",
-                telefone = "123",
-                documento = "123"
-            };
-            var newUserJson = JsonConvert.SerializeObject(newUser);
-            var postPayload = new StringContent(newUserJson, Encoding.UTF8, "application/json");
-            var postResponse = httpClient.PostAsync("api/Usuarios", postPayload).Result;
-            if (postResponse.IsSuccessStatusCode == false)
-            {
-                throw new ArgumentException("Não foi possivel criar um usuário teste");
-            }
-            var postJson = postResponse.Content.ReadAsStringAsync().Result;
-            dynamic postObject = JsonConvert.DeserializeObject(postJson);
-            await httpClient.PostAsync("api/Usuarios/" + postObject.id + "/desabilitado", null);
+            var httpClient = webApplicationFactory.CreateDefaultClient();
 
-            var userUpdate = new
+            dynamic adminTestUser = await new Utils().CreateTestUser(true);
+            dynamic nonAdminTestUser = await new Utils().CreateTestUser(false);
+
+            httpClient.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", adminTestUser.token);
+
+            var adminEnabledStatusResponse = httpClient.PostAsync("api/Usuarios/admin/" + nonAdminTestUser.id + "/habilitado", null).Result;
+            var adminDisabledStatusResponse = httpClient.PostAsync("api/Usuarios/admin/" + nonAdminTestUser.id + "/desabilitado", null).Result;
+
+            if (adminEnabledStatusResponse.IsSuccessStatusCode == false || adminDisabledStatusResponse.IsSuccessStatusCode == false)
             {
-                id = postObject.id,
-                email = "testeUpdate@teste.com",
-                senha = "testandoUpdateAPI",
-                eAdmin = false,
-                nome = "TesteUpdate",
-                telefone = "123Update",
-                documento = "123Update"
-            };
-            var userUpdateJson = JsonConvert.SerializeObject(userUpdate);
-            var putPayload = new StringContent(userUpdateJson, Encoding.UTF8, "application/json");
-            var putResponse = httpClient.PutAsync("api/Usuarios/" + postObject.id, putPayload).Result;
-            if (putResponse.IsSuccessStatusCode == false)
-            {
-                throw new ArgumentException("Não foi possivel atualizar o usuário de teste");
+                throw new ArgumentException("Não foi possivel alterar o status do usuário teste");
             }
-            Assert.IsTrue(putResponse.IsSuccessStatusCode);
+
+            httpClient.DefaultRequestHeaders.Clear();
+            httpClient.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", nonAdminTestUser.token);
+
+            var nonAdminEnabledStatusResponse = httpClient.PostAsync("api/Usuarios/admin/" + adminTestUser.id + "/habilitado", null).Result;
+            var nonAdminDisabledStatusResponse = httpClient.PostAsync("api/Usuarios/admin/" + adminTestUser.id + "/desabilitado", null).Result;
+
+            if (nonAdminEnabledStatusResponse.IsSuccessStatusCode == true && nonAdminDisabledStatusResponse.IsSuccessStatusCode == true)
+            {
+                throw new ArgumentException("O Usuário comum é capaz de alterar o status de outras contas");
+            }
+
+            Assert.IsTrue(adminEnabledStatusResponse.IsSuccessStatusCode == true
+                && adminDisabledStatusResponse.IsSuccessStatusCode == true 
+                && nonAdminEnabledStatusResponse.IsSuccessStatusCode == false 
+                && nonAdminDisabledStatusResponse.IsSuccessStatusCode == false);
         }
     }
 }

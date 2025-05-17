@@ -1,4 +1,6 @@
-﻿using System.Text;
+﻿using System.Net.Http.Headers;
+using System.Net.Http;
+using System.Text;
 using api_adota_pet.Models;
 using Microsoft.AspNetCore.Mvc.Testing;
 using Microsoft.VisualStudio.TestPlatform.ObjectModel;
@@ -10,161 +12,245 @@ namespace adota_pet.test
     public sealed class AnunciosTests
     {
         private static readonly WebApplicationFactory<Program> webApplicationFactory = new();
-        public readonly HttpClient httpClient = webApplicationFactory.CreateDefaultClient();
 
         [TestMethod]
-        public async Task POST_Anuncio_Creates_And_Returns_A_New_Anuncio()
+        public async Task Add()
         {
-            var newAnuncio = new
-            {
-                titulo = "AnimalTeste",
-                idadeAnimal = 5,
-                categoriaAnimal = 0,
-                racaAnimal = "RacaTeste",
-                descricao = "DescricaoTeste",
-                imagemCapa = "string",
-                usuarioId = 3
-            };
-            var newAnuncioJson = JsonConvert.SerializeObject(newAnuncio);
-            var payload = new StringContent(newAnuncioJson, Encoding.UTF8, "application/json");
-            var postResponse = httpClient.PostAsync("api/Anuncios", payload).Result;
-            if (postResponse.IsSuccessStatusCode == false)
-            {
-                throw new ArgumentException("Não foi possivel criar um anúncio teste");
-            }
-            var postJson = postResponse.Content.ReadAsStringAsync().Result;
-            dynamic postObject = JsonConvert.DeserializeObject(postJson);
-            await httpClient.PostAsync("api/Anuncios/" + postObject.id + "/deletado", null);
-            Assert.IsNotNull(postJson);
+            dynamic testUser = await new Utils().CreateTestUser(false);
+            dynamic testAnuncio = await new Utils().CreateTestAnuncio(testUser.token);
+            Assert.IsNotNull(testAnuncio);
         }
 
         [TestMethod]
-        public async Task GET_Anuncio_By_Id_Returns_Anuncio()
+        public async Task GetById()
         {
-            var newAnuncio = new
-            {
-                titulo = "AnimalTeste",
-                idadeAnimal = 5,
-                categoriaAnimal = 0,
-                racaAnimal = "RacaTeste",
-                descricao = "DescricaoTeste",
-                imagemCapa = "string",
-                usuarioId = 3
-            };
-            var newAnuncioJson = JsonConvert.SerializeObject(newAnuncio);
-            var payload = new StringContent(newAnuncioJson, Encoding.UTF8, "application/json");
-            var postResponse = httpClient.PostAsync("api/Anuncios", payload).Result;
-            if (postResponse.IsSuccessStatusCode == false)
-            {
-                throw new ArgumentException("Não foi possivel criar um anúncio teste");
-            }
-            var postJson = postResponse.Content.ReadAsStringAsync().Result;
-            dynamic postObject = JsonConvert.DeserializeObject(postJson);
-            await httpClient.PostAsync("api/Anuncios/" + postObject.id + "/deletado", null);
+            dynamic testUser = await new Utils().CreateTestUser(false);
+            dynamic testAnuncio = await new Utils().CreateTestAnuncio(testUser.token);
 
-            var getResponse = httpClient.GetAsync("api/Anuncios/" + postObject.id).Result;
-            if (getResponse.IsSuccessStatusCode == false)
+            var httpClient = webApplicationFactory.CreateDefaultClient();
+            httpClient.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", testUser.token);
+
+            var response = httpClient.GetAsync("api/Anuncios/" + testAnuncio.id).Result;
+            if (response.IsSuccessStatusCode == false)
             {
-                throw new ArgumentException("Não foi possivel achar o anúncio teste");
+                throw new ArgumentException("Não foi possivel resgatar o anuncio teste");
             }
-            var getJson = getResponse.Content.ReadAsStringAsync().Result;
-            Assert.IsNotNull(getJson);
+            var responseData = response.Content.ReadAsStringAsync().Result;
+
+            Assert.IsNotNull(responseData);
         }
 
         [TestMethod]
-        public void POST_Anuncio_Status_Changes_Anuncio_Status()
+        public async Task GetAll()
         {
-            var newAnuncio = new
-            {
-                titulo = "AnimalTeste",
-                idadeAnimal = 5,
-                categoriaAnimal = 0,
-                racaAnimal = "RacaTeste",
-                descricao = "DescricaoTeste",
-                imagemCapa = "string",
-                usuarioId = 3
-            };
-            var newAnuncioJson = JsonConvert.SerializeObject(newAnuncio);
-            var payload = new StringContent(newAnuncioJson, Encoding.UTF8, "application/json");
-            var creationResponse = httpClient.PostAsync("api/Anuncios", payload).Result;
-            if (creationResponse.IsSuccessStatusCode == false)
-            {
-                throw new ArgumentException("Não foi possivel criar um anúncio teste");
-            }
-            var creationJson = creationResponse.Content.ReadAsStringAsync().Result;
-            dynamic creationObject = JsonConvert.DeserializeObject(creationJson);
+            dynamic testUser = await new Utils().CreateTestUser(false);
+            dynamic testAnuncio = await new Utils().CreateTestAnuncio(testUser.token);
 
-            var postResponseEnabled = httpClient.PostAsync("api/Anuncios/" + creationObject.id + "/publicado", null).Result;
-            if (postResponseEnabled.IsSuccessStatusCode == false)
-            {
-                throw new ArgumentException("Não foi possivel alterar o status do anúncio teste para publicado");
-            }
+            var httpClient = webApplicationFactory.CreateDefaultClient();
+            httpClient.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", testUser.token);
 
-            var postResponseDisabled = httpClient.PostAsync("api/Anuncios/" + creationObject.id + "/deletado", null).Result;
-            if (postResponseDisabled.IsSuccessStatusCode == false)
+            var response = httpClient.GetAsync("api/Anuncios/").Result;
+            if (response.IsSuccessStatusCode == false)
             {
-                throw new ArgumentException("Não foi possivel alterar o status do anúncio teste para deletado");
+                throw new ArgumentException("Não foi possivel resgatar os anuncios");
             }
-            Assert.IsTrue(postResponseEnabled.IsSuccessStatusCode && postResponseDisabled.IsSuccessStatusCode);
+            var responseData = response.Content.ReadAsStringAsync().Result;
+
+            Assert.IsNotNull(responseData);
         }
 
         [TestMethod]
-        public async Task PUT_Anuncio_Updates_Anuncio()
+        public async Task Update()
         {
-            var newAnuncio = new
-            {
-                titulo = "AnimalTeste",
-                idadeAnimal = 5,
-                categoriaAnimal = 0,
-                racaAnimal = "RacaTeste",
-                descricao = "DescricaoTeste",
-                imagemCapa = "string",
-                usuarioId = 3
-            };
-            var newAnuncioJson = JsonConvert.SerializeObject(newAnuncio);
-            var postPayload = new StringContent(newAnuncioJson, Encoding.UTF8, "application/json");
-            var postResponse = httpClient.PostAsync("api/Anuncios", postPayload).Result;
-            if (postResponse.IsSuccessStatusCode == false)
-            {
-                throw new ArgumentException("Não foi possivel criar um anúncio teste");
-            }
-            var postJson = postResponse.Content.ReadAsStringAsync().Result;
-            dynamic postObject = JsonConvert.DeserializeObject(postJson);
-            await httpClient.PostAsync("api/Anuncios/" + postObject.id + "/deletado", null);
+            dynamic testUser = await new Utils().CreateTestUser(false);
+            dynamic testAnuncio = await new Utils().CreateTestAnuncio(testUser.token);
 
-            var anuncioUpdate = new
+            var httpClient = webApplicationFactory.CreateDefaultClient();
+            httpClient.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", testUser.token);
+
+            var testAnuncioUpdate = new
             {
-                id = postObject.id,
+                id = testAnuncio.id,
                 titulo = "AnimalTesteUpdate",
                 idadeAnimal = 5,
                 categoriaAnimal = 0,
                 racaAnimal = "RacaTesteUpdate",
                 descricao = "DescricaoTesteUpdate",
                 imagemCapa = "stringUpdate",
-                usuarioId = 3
             };
-            var anuncioUpdateJson = JsonConvert.SerializeObject(anuncioUpdate);
-            var putPayload = new StringContent(anuncioUpdateJson, Encoding.UTF8, "application/json");
-            var putResponse = httpClient.PutAsync("api/Anuncios/" + postObject.id, putPayload).Result;
-            if (putResponse.IsSuccessStatusCode == false)
+            var testAnuncioUpdateJson = JsonConvert.SerializeObject(testAnuncioUpdate);
+            var payload = new StringContent(testAnuncioUpdateJson, Encoding.UTF8, "application/json");
+            var response = httpClient.PutAsync("api/Anuncios/" + testAnuncio.id, payload).Result;
+            if (response.IsSuccessStatusCode == false)
             {
                 throw new ArgumentException("Não foi possivel atualizar o anúncio de teste");
             }
-            await httpClient.PostAsync("api/Anuncios/" + postObject.id + "/deletado", null);
-            Assert.IsTrue(putResponse.IsSuccessStatusCode);
+            var responseData = response.Content.ReadAsStringAsync().Result;
+
+            Assert.IsNotNull(responseData);
         }
 
         [TestMethod]
-        public void Get_Anuncios_Returns_All_Existing_Anuncios()
+        public async Task Like()
         {
-            var getResponse = httpClient.GetAsync("api/Anuncios/").Result;
-            if (getResponse.IsSuccessStatusCode == false)
+            dynamic testUser = await new Utils().CreateTestUser(false);
+            dynamic testAnuncio = await new Utils().CreateTestAnuncio(testUser.token);
+
+            var httpClient = webApplicationFactory.CreateDefaultClient();
+            httpClient.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", testUser.token);
+
+            var response = httpClient.PostAsync("api/Anuncios/like/" + testAnuncio.id, null).Result;
+            if (response.IsSuccessStatusCode == false)
             {
-                throw new ArgumentException("Não foi possivel achar os anúncios");
+                throw new ArgumentException("Não foi possivel favoritar o anúncio de teste");
             }
-            var getJson = getResponse.Content.ReadAsStringAsync().Result;
-            dynamic getObject = JsonConvert.DeserializeObject(getJson);
-            Assert.IsTrue(getObject is IEnumerable<object>);
+            var responseData = response.Content.ReadAsStringAsync().Result;
+
+            Assert.IsNotNull(responseData);
+        }
+
+        [TestMethod]
+        public async Task Dislike()
+        {
+            dynamic testUser = await new Utils().CreateTestUser(false);
+            dynamic testAnuncio = await new Utils().CreateTestAnuncio(testUser.token);
+
+            var httpClient = webApplicationFactory.CreateDefaultClient();
+            httpClient.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", testUser.token);
+
+            var likeResponse = httpClient.PostAsync("api/Anuncios/like/" + testAnuncio.id, null).Result;
+            if (likeResponse.IsSuccessStatusCode == false)
+            {
+                throw new ArgumentException("Não foi possivel favoritar o anúncio de teste");
+            }
+
+            var dislikeResponse = httpClient.DeleteAsync("api/Anuncios/like/" + testAnuncio.id).Result;
+            if (dislikeResponse.IsSuccessStatusCode == false)
+            {
+                throw new ArgumentException("Não foi possivel desfavoritar o anúncio de teste");
+            }
+            var responseData = dislikeResponse.Content.ReadAsStringAsync().Result;
+
+            Assert.IsNotNull(responseData);
+        }
+
+        [TestMethod]
+        public async Task GetAllLikes()
+        {
+            dynamic testUser = await new Utils().CreateTestUser(false);
+            dynamic testAnuncio = await new Utils().CreateTestAnuncio(testUser.token);
+
+            var httpClient = webApplicationFactory.CreateDefaultClient();
+            httpClient.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", testUser.token);
+
+            var likeResponse = httpClient.PostAsync("api/Anuncios/like/" + testAnuncio.id, null).Result;
+            if (likeResponse.IsSuccessStatusCode == false)
+            {
+                throw new ArgumentException("Não foi possivel favoritar o anúncio de teste");
+            }
+
+            var getAllResponse = httpClient.GetAsync("api/Anuncios/like").Result;
+            if (getAllResponse.IsSuccessStatusCode == false)
+            {
+                throw new ArgumentException("Não foi possivel resgatar os anuncios curtidos");
+            }
+            var responseData = getAllResponse.Content.ReadAsStringAsync().Result;
+
+            Assert.IsNotNull(responseData);
+        }
+
+        [TestMethod]
+        public async Task Report()
+        {
+            dynamic testUser = await new Utils().CreateTestUser(false);
+            dynamic testAnuncio = await new Utils().CreateTestAnuncio(testUser.token);
+
+            var httpClient = webApplicationFactory.CreateDefaultClient();
+            httpClient.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", testUser.token);
+
+            var response = httpClient.PostAsync("api/Anuncios/report/" + testAnuncio.id, null).Result;
+            if (response.IsSuccessStatusCode == false)
+            {
+                throw new ArgumentException("Não foi possivel denunciar o anúncio de teste");
+            }
+            var responseData = response.Content.ReadAsStringAsync().Result;
+
+            Assert.IsNotNull(responseData);
+        }
+
+        [TestMethod]
+        public async Task GetAllReports()
+        {
+            dynamic testUser = await new Utils().CreateTestUser(true);
+            dynamic testAnuncio = await new Utils().CreateTestAnuncio(testUser.token);
+
+            var httpClient = webApplicationFactory.CreateDefaultClient();
+            httpClient.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", testUser.token);
+
+            var reportResponse = httpClient.PostAsync("api/Anuncios/report/" + testAnuncio.id, null).Result;
+            if (reportResponse.IsSuccessStatusCode == false)
+            {
+                throw new ArgumentException("Não foi possivel denunciar o anúncio de teste");
+            }
+
+            var getAllResponse = httpClient.GetAsync("api/Anuncios/report").Result;
+            if (getAllResponse.IsSuccessStatusCode == false)
+            {
+                throw new ArgumentException("Não foi possivel resgatar os anuncios denunciados");
+            }
+            var responseData = getAllResponse.Content.ReadAsStringAsync().Result;
+
+            Assert.IsNotNull(responseData);
+        }
+
+        [TestMethod]
+        public async Task UpdateStatus()
+        {
+            dynamic testUser = await new Utils().CreateTestUser(false);
+            dynamic testAnuncio = await new Utils().CreateTestAnuncio(testUser.token);
+
+            var httpClient = webApplicationFactory.CreateDefaultClient();
+            httpClient.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", testUser.token);
+
+            var postResponseEnabled = httpClient.PostAsync("api/Anuncios/" + testAnuncio.id + "/publicado", null).Result;
+            if (postResponseEnabled.IsSuccessStatusCode == false)
+            {
+                throw new ArgumentException("Não foi possivel alterar o status do anúncio teste para publicado");
+            }
+
+            var postResponseDisabled = httpClient.PostAsync("api/Anuncios/" + testAnuncio.id + "/deletado", null).Result;
+            if (postResponseDisabled.IsSuccessStatusCode == false)
+            {
+                throw new ArgumentException("Não foi possivel alterar o status do anúncio teste para deletado");
+            }
+
+            Assert.IsTrue(postResponseEnabled.IsSuccessStatusCode == true && postResponseDisabled.IsSuccessStatusCode == true);
+        }
+
+        [TestMethod]
+        public async Task UpdateStatusAdmin()
+        {
+
+            dynamic adminTestUser = await new Utils().CreateTestUser(true);
+            dynamic nonAdminTestUser = await new Utils().CreateTestUser(false);
+            dynamic testAnuncio = await new Utils().CreateTestAnuncio(nonAdminTestUser.token);
+
+            var httpClient = webApplicationFactory.CreateDefaultClient();
+            httpClient.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", adminTestUser.token);
+
+            var postResponseEnabled = httpClient.PostAsync("api/Anuncios/admin/" + testAnuncio.id + "/publicado", null).Result;
+            if (postResponseEnabled.IsSuccessStatusCode == false)
+            {
+                throw new ArgumentException("Não foi possivel alterar o status do anúncio teste para publicado");
+            }
+
+            var postResponseDisabled = httpClient.PostAsync("api/Anuncios/admin/" + testAnuncio.id + "/deletado", null).Result;
+            if (postResponseDisabled.IsSuccessStatusCode == false)
+            {
+                throw new ArgumentException("Não foi possivel alterar o status do anúncio teste para deletado");
+            }
+
+            Assert.IsTrue(postResponseEnabled.IsSuccessStatusCode == true && postResponseDisabled.IsSuccessStatusCode == true);
         }
     }
 }
