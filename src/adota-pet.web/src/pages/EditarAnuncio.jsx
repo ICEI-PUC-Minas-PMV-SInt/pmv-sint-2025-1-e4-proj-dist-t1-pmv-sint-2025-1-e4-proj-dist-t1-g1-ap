@@ -3,7 +3,7 @@ import { useParams, useNavigate } from 'react-router-dom' // Importar useNavigat
 import { Navbar } from '../components/Navbar'
 import { api } from '../helpers/api'
 
-function Editar_Anuncio() {
+function EditarAnuncio() {
   const { id } = useParams()
   const navigate = useNavigate() // Hook para navegação
   const [formData, setFormData] = useState({})
@@ -52,6 +52,9 @@ function Editar_Anuncio() {
       .catch(err => {
         setLoading(false)
         console.error(err)
+        if (err.status == 401) {
+          return setWarning(`Erro, o anúncio não é seu`)
+        }
         setWarning(
           `Erro "${err.message}", consulte o console para mais informações`,
         )
@@ -165,4 +168,4 @@ function Input({ id, type, value, onChange, placeholder }) {
   )
 }*/
 
-export { Editar_Anuncio }
+export { EditarAnuncio }

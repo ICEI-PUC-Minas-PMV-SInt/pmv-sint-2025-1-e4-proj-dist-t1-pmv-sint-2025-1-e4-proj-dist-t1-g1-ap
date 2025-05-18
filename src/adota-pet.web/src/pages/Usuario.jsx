@@ -1,34 +1,32 @@
-import { useRef, useState } from 'react'
+import { useEffect, useState } from 'react'
 import { Navbar } from '../components/Navbar'
 import { api } from '../helpers/api'
 
 function Usuario() {
-  const searchInput = useRef()
-
-  const [data, setData] = useState(null)
   const [loading, setLoading] = useState(false)
   const [warning, setWarning] = useState(null)
+  const [data, setData] = useState(null)
+  const userId = localStorage.getItem('userId')
 
-  const handleSearch = async event => {
-    event.preventDefault()
-    setWarning(null)
-    setData(null)
+  useEffect(() => {
+    const fetchUser = async () => {
+      setLoading(true)
+      await api
+        .get(`/Usuarios/${userId}`)
+        .then(res => {
+          setData(res.data)
+          setLoading(false)
+        })
+        .catch(err => {
+          setWarning(err.message)
+          console.log(err)
+          setLoading(false)
+        })
+    }
+    fetchUser()
+  }, [])
 
-    setLoading(true)
-    await api
-      .get(`/Usuarios/${searchInput.current.value}`)
-      .then(res => {
-        setLoading(false)
-        setData(res.data)
-      })
-      .catch(err => {
-        setLoading(false)
-        console.log(err)
-        setWarning(
-          `Erro "${err.message}", consulte o console para mais informações`,
-        )
-      })
-  }
+  console.log(data)
 
   const handleEdit = async event => {
     event.preventDefault()
@@ -36,8 +34,8 @@ function Usuario() {
 
     setLoading(true)
     await api
-      .put(`/Usuarios/${data.id}`, {
-        id: data.id,
+      .put(`/Usuarios/${userId}`, {
+        id: userId,
         email: data.usuario.email,
         senha: data.usuario.senha,
         eAdmin: true,
@@ -107,23 +105,9 @@ function Usuario() {
             <form
               className='flex w-full gap-2 px-2.5 pt-2.5 pb-6'
               onSubmit={event => handleSearch(event)}
-            >
-              <input
-                type='number'
-                className='flex-1 rounded-lg border-0 bg-[#ffffff] px-2 text-[#4f4f4f] outline-0 transition-all placeholder:font-bold placeholder:text-[#b1b1b1] placeholder:italic hover:scale-105 focus:scale-105'
-                placeholder='ID do Usuário'
-                ref={searchInput}
-                min={1}
-                required
-              />
-              <input
-                type='submit'
-                className='cursor-pointer rounded-lg bg-[#849e9f] p-1.5 text-xl transition-all hover:scale-105 active:scale-95'
-                value={'🔍'}
-              />
-            </form>
+            ></form>
 
-            <div className='flex w-full justify-between px-4 pb-2.5'>
+            <div className='flex w-full justify-between px-4 pb-5.5'>
               <div className='flex gap-1'>
                 <p className='font-bold text-[#b1b1b1] italic'>Status:</p>
                 {data?.usuario?.status == 0 && (
@@ -218,7 +202,6 @@ function Input({ placeholder, type, value, onChange }) {
         value={value ? value : ''}
         onChange={onChange}
         required
-        readOnly={value == null ? true : false}
         className='flex-1 text-[#4f4f4f] outline-0'
       />
     </div>

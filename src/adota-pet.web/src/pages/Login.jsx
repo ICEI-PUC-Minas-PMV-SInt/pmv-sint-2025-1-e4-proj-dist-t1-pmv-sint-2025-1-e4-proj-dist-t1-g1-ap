@@ -1,58 +1,81 @@
 import { useState } from 'react'
 import { Navbar } from '../components/Navbar'
 import { api } from '../helpers/api'
+import { useNavigate } from 'react-router-dom'
 
 function Login() {
   const [warning, setWarning] = useState(null)
   const [loading, setLoading] = useState(false)
+  const navigate = useNavigate()
+
+  const getUserIdByToken = token => {
+    try {
+      const base64Url = token.split('.')[1]
+      const base64 = base64Url.replace(/-/g, '+').replace(/_/g, '/')
+      const jsonPayload = decodeURIComponent(
+        atob(base64)
+          .split('')
+          .map(c => '%' + ('00' + c.charCodeAt(0).toString(16)).slice(-2))
+          .join(''),
+      )
+      const parsedJwt = JSON.parse(jsonPayload)
+      return parsedJwt.nameid
+    } catch (e) {
+      console.error('Token invalido', e)
+      return null
+    }
+  }
 
   const handleSubmit = async event => {
     event.preventDefault()
     setWarning(null)
 
-    const email = document.getElementById('emailInput').value
+    const documento = document.getElementById('documentoInput').value
     const senha = document.getElementById('senhaInput').value
 
     setLoading(true)
-    try {
-      const res = await api.post('/login', {
-        email: email,
-        senha: senha,
+    await api
+      .post('Usuarios/authenticate', {
+        documento,
+        senha,
       })
-
-      setWarning(
-        `Login realizado com sucesso! Bem-vindo(a) ${res.data.nome || ''}`,
-      )
-      // Redirecionar após login bem-sucedido, se necessário
-      // window.location.href = '/dashboard'
-    } catch (err) {
-      console.log(err)
-      setWarning(
-        `Erro: "${err.message}". Verifique o console para mais detalhes.`,
-      )
-    } finally {
-      setLoading(false)
-    }
+      .then(res => {
+        localStorage.setItem('token', res.data.jwtToken)
+        localStorage.setItem('userId', getUserIdByToken(res.data.jwtToken))
+        setLoading(false)
+        navigate('/usuario')
+      })
+      .catch(err => {
+        console.error(err)
+        if (err.status == 401) {
+          setWarning(`Login não autorizado, verifique as credenciais`)
+        } else {
+          setWarning(
+            `Erro: "${err.message}". Verifique o console para mais detalhes.`,
+          )
+        }
+        setLoading(false)
+      })
   }
 
   return (
     <div className='font-inter h-screen w-screen bg-[#efefef] antialiased'>
       <Navbar />
       <div className='flex h-full w-full items-center justify-center'>
-        <div className='relative w-full max-w-sm px-4'>
+        <div className='relative w-full max-w-sm px-1'>
           <div className='w-full overflow-hidden rounded-xl shadow-2xl shadow-neutral-300'>
             <h1 className='w-full bg-[#3b5253] py-5 text-center tracking-wider text-white'>
               Login
             </h1>
             <form
               id='loginForm'
-              className='flex w-full flex-col items-center gap-4 px-5 py-12'
+              className='flex w-full flex-col items-center gap-3 px-2.5 py-8.5'
               onSubmit={handleSubmit}
             >
               <Input
-                id='emailInput'
-                placeholder='Email'
-                type='email'
+                id='documentoInput'
+                placeholder='Documento'
+                type='text'
                 required
               />
               <Input
@@ -64,13 +87,13 @@ function Login() {
               <div className='flex w-full gap-3'>
                 <input
                   type='submit'
-                  className='flex-1 cursor-pointer rounded-md bg-[#5e8a8c] px-6 py-2 text-white transition-all hover:scale-105 active:scale-95'
+                  className='flex-1 cursor-pointer rounded-sm bg-[#5e8a8c] px-1 py-2 text-white transition-all hover:scale-105 active:scale-95'
                   value='Entrar'
                 />
                 <button
                   type='button'
-                  onClick={() => (window.location.href = '/.')}
-                  className='flex-1 cursor-pointer rounded-md bg-[#cccccc] px-6 py-2 text-[#333] transition-all hover:scale-105 active:scale-95'
+                  onClick={() => navigate('/cadastro')}
+                  className='flex-1 cursor-pointer rounded-md bg-[#cccccc] px-1 py-2 text-[#333] transition-all hover:scale-105 active:scale-95'
                 >
                   Criar uma conta
                 </button>
