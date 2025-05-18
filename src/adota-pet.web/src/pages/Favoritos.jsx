@@ -46,7 +46,7 @@ function Favoritos() {
 
         {lista.length === 0 ? (
           <p className='text-center text-gray-500'>
-            Nenhum anúncio denunciado.
+            Nenhum anúncio favoritado.
           </p>
         ) : (
           <div className='grid gap-4'>
