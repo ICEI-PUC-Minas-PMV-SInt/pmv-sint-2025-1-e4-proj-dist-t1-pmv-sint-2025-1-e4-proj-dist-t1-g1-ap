@@ -175,6 +175,142 @@ namespace api_adota_pet.Controllers
             return Ok(model);
         }
 
+        [HttpPost("like/{id}")]
+        public async Task<ActionResult> Like(int id)
+        {
+            int usuarioId;
+            if (!int.TryParse(User.FindFirst(ClaimTypes.NameIdentifier)?.Value, out usuarioId)) return Unauthorized();
+            
+            var modelUsuario = await _context.Usuarios
+            .AsNoTracking()
+            .FirstOrDefaultAsync(usuario => usuario.Id == usuarioId);
+            if (modelUsuario == null) return Unauthorized();
+            
+            var modelAnuncio = await _context.Anuncios
+            .AsNoTracking()
+            .FirstOrDefaultAsync(anuncio => anuncio.Id == id);
+            if (modelAnuncio == null) return NotFound();
+
+            var modelInteracao = await _context.Interacoes
+            .AsNoTracking()
+            .FirstOrDefaultAsync(interacao => interacao.IdUsuario == usuarioId && interacao.IdAnuncio == id && interacao.NomeInteracao == NomeInteracao.Like);
+            if (modelInteracao != null) return Conflict();
+
+            Interacao interacao = new Interacao()
+            {
+                NomeInteracao = NomeInteracao.Like,
+                IdUsuario = usuarioId,
+                IdAnuncio = id,
+            };
+
+            _context.Interacoes.Add(interacao);
+            await _context.SaveChangesAsync();
+
+            return Ok(interacao);
+        }
+
+        [HttpDelete("like/{id}")]
+        public async Task<ActionResult> Dislike(int id)
+        {
+            int usuarioId;
+            if (!int.TryParse(User.FindFirst(ClaimTypes.NameIdentifier)?.Value, out usuarioId)) return Unauthorized();
+
+            var modelUsuario = await _context.Usuarios
+            .AsNoTracking()
+            .FirstOrDefaultAsync(usuario => usuario.Id == usuarioId);
+            if (modelUsuario == null) return Unauthorized();
+
+            var modelAnuncio = await _context.Anuncios
+            .AsNoTracking()
+            .FirstOrDefaultAsync(anuncio => anuncio.Id == id);
+            if (modelAnuncio == null) return NotFound();
+
+            var modelInteracao = await _context.Interacoes
+            .AsNoTracking()
+            .FirstOrDefaultAsync(interacao => interacao.IdUsuario == usuarioId && interacao.IdAnuncio == id && interacao.NomeInteracao == NomeInteracao.Like);
+            if (modelInteracao == null) return NotFound();
+
+            _context.Interacoes.Remove(modelInteracao);
+            await _context.SaveChangesAsync();
+
+            return Ok(new { message = "Like deletado" });
+        }
+
+        [HttpGet("like")]
+        public async Task<ActionResult> GetAllLikes()
+        {
+            int usuarioId;
+            if (!int.TryParse(User.FindFirst(ClaimTypes.NameIdentifier)?.Value, out usuarioId)) return Unauthorized();
+
+            var modelUsuario = await _context.Usuarios
+            .AsNoTracking()
+            .FirstOrDefaultAsync(usuario => usuario.Id == usuarioId);
+            if (modelUsuario == null) return Unauthorized();
+
+            var modelInteracao = await _context.Interacoes
+            .Where(interacao => interacao.IdUsuario == usuarioId && interacao.NomeInteracao == NomeInteracao.Like)
+            .ToListAsync();
+
+            if (modelInteracao.IsNullOrEmpty()) return NoContent();
+
+            return Ok(modelInteracao);
+        }
+
+        [HttpPost("report/{id}")]
+        public async Task<ActionResult> Report(int id)
+        {
+            int usuarioId;
+            if (!int.TryParse(User.FindFirst(ClaimTypes.NameIdentifier)?.Value, out usuarioId)) return Unauthorized();
+
+            var modelUsuario = await _context.Usuarios
+            .AsNoTracking()
+            .FirstOrDefaultAsync(usuario => usuario.Id == usuarioId);
+            if (modelUsuario == null) return Unauthorized();
+
+            var modelAnuncio = await _context.Anuncios
+            .AsNoTracking()
+            .FirstOrDefaultAsync(anuncio => anuncio.Id == id);
+            if (modelAnuncio == null) return NotFound();
+
+            var modelInteracao = await _context.Interacoes
+            .AsNoTracking()
+            .FirstOrDefaultAsync(interacao => interacao.IdUsuario == usuarioId && interacao.IdAnuncio == id && interacao.NomeInteracao == NomeInteracao.Report);
+            if (modelInteracao != null) return Conflict();
+
+            Interacao interacao = new Interacao()
+            {
+                NomeInteracao = NomeInteracao.Report,
+                IdUsuario = usuarioId,
+                IdAnuncio = id,
+            };
+
+            _context.Interacoes.Add(interacao);
+            await _context.SaveChangesAsync();
+
+            return Ok(interacao);
+        }
+
+        [Authorize(Roles = "Admin")]
+        [HttpGet("report")]
+        public async Task<ActionResult> GetAllReports()
+        {
+            int usuarioId;
+            if (!int.TryParse(User.FindFirst(ClaimTypes.NameIdentifier)?.Value, out usuarioId)) return Unauthorized();
+
+            var modelUsuario = await _context.Usuarios
+            .AsNoTracking()
+            .FirstOrDefaultAsync(usuario => usuario.Id == usuarioId);
+            if (modelUsuario == null) return Unauthorized();
+
+            var modelInteracao = await _context.Interacoes
+            .Where(interacao => interacao.NomeInteracao == NomeInteracao.Report)
+            .ToListAsync();
+
+            if (modelInteracao.IsNullOrEmpty()) return NoContent();
+
+            return Ok(modelInteracao);
+        }
+
         [Authorize(Roles = "Admin")]
         [HttpPost("admin/{id}/{status}")]
         public async Task<ActionResult> UpdateAnuncioStatus(int id, string status)
@@ -225,7 +361,5 @@ namespace api_adota_pet.Controllers
 
             return Ok(model);
         }
-
-
     }
 }

@@ -33,6 +33,10 @@ function Cadastro() {
       .catch(err => {
         setLoading(false)
         console.log(err)
+        if (err.status == 400) {
+          return setWarning(`Usuário já existe, tente novamente`)
+        }
+
         setWarning(
           `Erro "${err.message}", consulte o console para mais informações`,
         )

@@ -11,5 +11,6 @@ namespace api_adota_pet.Models
         public DbSet<Usuario> Usuarios { get; set; }
         public DbSet<Pessoa> Pessoas { get; set; }
         public DbSet<Anuncio> Anuncios { get; set; }
+        public DbSet<Interacao> Interacoes { get; set; }
     }
 }

@@ -2,7 +2,7 @@ import { useState } from 'react'
 import { Navbar } from '../components/Navbar'
 import { api } from '../helpers/api'
 
-function Criar_Anuncio() {
+function CriarAnuncio() {
   const [warning, setWarning] = useState(null)
   const [loading, setLoading] = useState(false)
 
@@ -133,4 +133,4 @@ function Input({ id, placeholder, type, required }) {
   )
 }*/
 
-export { Criar_Anuncio }
+export { CriarAnuncio }
