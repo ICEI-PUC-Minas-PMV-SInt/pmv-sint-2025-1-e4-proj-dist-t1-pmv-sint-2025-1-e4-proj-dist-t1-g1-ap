@@ -5,10 +5,10 @@ namespace api_adota_pet.Models
     public class AuthenticateDto
     {
         [Required]
-        public string Documento { get; set; }
+        public string? Documento { get; set; }
         
         [Required]
-        public string Senha { get; set; }
+        public string? Senha { get; set; }
 
     }
 }

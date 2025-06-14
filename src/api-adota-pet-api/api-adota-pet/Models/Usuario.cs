@@ -10,14 +10,14 @@ namespace api_adota_pet.Models
         public int Id { get; set; }
 
         [Required]
-        public string ExternalId { get; set; }
+        public string? ExternalId { get; set; }
 
         [Required]
-        public string Email { get; set; }
+        public string? Email { get; set; }
 
         [Required]
         [JsonIgnore]
-        public string Senha { get; set; }
+        public string? Senha { get; set; }
 
         [Required]
         public bool EAdmin { get; set; }
@@ -25,7 +25,7 @@ namespace api_adota_pet.Models
         [Required]
         public StatusUsuario Status { get; set; } 
 
-        public ICollection<Anuncio> Anuncio { get; set; }
+        public ICollection<Anuncio>? Anuncio { get; set; }
 
 
     }

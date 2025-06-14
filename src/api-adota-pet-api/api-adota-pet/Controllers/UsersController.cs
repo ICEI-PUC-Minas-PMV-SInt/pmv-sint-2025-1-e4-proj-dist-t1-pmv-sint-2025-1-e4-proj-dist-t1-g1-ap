@@ -184,11 +184,18 @@ namespace api_adota_pet.Controllers
             if (usuarioDb == null) return Unauthorized();
 
 
-            if (usuarioDb == null || !BCrypt.Net.BCrypt.Verify(model.Senha, usuarioDb.Usuario.Senha))
+            if (usuarioDb == null || usuarioDb?.Usuario == null || !BCrypt.Net.BCrypt.Verify(model.Senha, usuarioDb?.Usuario?.Senha))
                 return Unauthorized();
 
-            var jwt = GenerateJwtToken(usuarioDb.Usuario);
-            return Ok(new { jwtToken = jwt });
+            if(usuarioDb?.Usuario != null){
+                var jwt = GenerateJwtToken(usuarioDb.Usuario);
+                return Ok(new { jwtToken = jwt });
+            }
+            else
+            {
+                return Unauthorized();
+
+            }
         }
 
 

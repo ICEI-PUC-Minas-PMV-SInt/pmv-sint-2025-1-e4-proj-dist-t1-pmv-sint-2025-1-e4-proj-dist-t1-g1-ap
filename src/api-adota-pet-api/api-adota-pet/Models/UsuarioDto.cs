@@ -7,21 +7,21 @@ namespace api_adota_pet.Models
         public int Id { get; set; }
 
         [Required]
-        public string Email { get; set; }
+        public string? Email { get; set; }
 
         [Required]
-        public string Senha { get; set; }
+        public string? Senha { get; set; }
 
         [Required]
         public bool EAdmin { get; set; }
 
         [Required]
-        public string Nome { get; set; }
+        public string? Nome { get; set; }
 
         [Required]
-        public string Telefone { get; set; }
+        public string? Telefone { get; set; }
 
         [Required]
-        public string Documento { get; set; }
+        public string? Documento { get; set; }
     }
 }
