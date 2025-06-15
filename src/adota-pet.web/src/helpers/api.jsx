@@ -1,7 +1,7 @@
 import axios from 'axios'
 
 const api = axios.create({
-  baseURL: 'https://localhost:44381/api',
+  baseURL: 'https://api-adota-pet.azurewebsites.net/api',
 })
 
 // Interceptor para adicionar o token automaticamente no header
