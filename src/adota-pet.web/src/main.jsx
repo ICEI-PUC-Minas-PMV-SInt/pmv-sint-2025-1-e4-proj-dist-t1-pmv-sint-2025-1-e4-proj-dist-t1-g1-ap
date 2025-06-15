@@ -21,7 +21,7 @@ createRoot(document.getElementById('root')).render(
       <Navbar />
       <Routes>
         {/* Redireciona '/' para uma página válida */}
-        <Route path='/' element={<Navigate to='/anuncios' replace />} />
+        <Route path='/' element={<Navigate to='/login' replace />} />
         {/* Rotas reais */}
         <Route path='/cadastro' element={<Cadastro />} />
         <Route path='/usuario' element={<Usuario />} />
